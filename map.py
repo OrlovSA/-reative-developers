@@ -21,7 +21,6 @@ with open("POI.geojson", encoding='UTF-8') as read_file:
         pos = data[i].get('geometry').get('coordinates')
         name = data[i].get('properties').get('name')
         pos[0], pos[1] = pos[1], pos[0]
-        print(i)
         folium.CircleMarker(location=pos, popup=name, radius=9, color="red").add_to(marker_cluster)
 
 num = 0
@@ -30,8 +29,11 @@ with open("buildings.geojson", encoding='UTF-8') as read_file:
     data = geojson.load(read_file)
     # позже разобратся почему не итерирует дата
     for i in range(60902):
-        if data[i].get('properties').get('building') == 'yes':
-            population = data[i].get('properties').get('population')
+        if data[i].get('properties').get('population') != None:
+            geo = len(data[i].get('geometry').get('coordinates')[0][0])
+            print(geo)
+            population = data[i].get('properties').get('population')//geo
+            print(population)
             for pos in data[i].get('geometry').get('coordinates')[0][0]:
                 pos[0], pos[1] = pos[1], pos[0]
                 num += 1
